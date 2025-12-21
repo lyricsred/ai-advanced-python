@@ -1,19 +1,19 @@
 import pandas as pd
 import numpy as np
 import streamlit as st
-from data_analysis import (
+from utils.data_analysis import (
     analyze_data_sequential,
     analyze_data_parallel,
     compare_parallelization_performance,
     get_seasonal_normal_range
 )
-from weather_api import (
+from utils.weather_api import (
     get_current_temperature_sync,
     get_current_temperature_async_wrapper,
     get_current_season,
     compare_sync_async_performance
 )
-from visualizations import (
+from utils.visualizations import (
     plot_temperature_timeseries,
     plot_seasonal_profiles,
     plot_temperature_distribution,

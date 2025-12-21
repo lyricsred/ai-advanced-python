@@ -44,7 +44,7 @@ pip install -r requirements.txt
 
 Убедитесь, что виртуальное окружение активировано, затем запустите приложение:
 ```bash
-streamlit run src/main.py
+streamlit run main.py
 ```
 
 Приложение откроется в браузере по адресу `http://localhost:8501`
@@ -78,11 +78,11 @@ streamlit run src/main.py
 
 ```
 Streamlit/
-├── src/
+├── main.py                 # Главный файл Streamlit приложения
+├── utils/
 │   ├── __init__.py         # Инициализация пакета
-│   ├── main.py             # Главный файл Streamlit приложения
 │   ├── data_analysis.py    # Функции для анализа данных
-│   ├── weather_api.py       # Функции для работы с OpenWeatherMap API
+│   ├── weather_api.py      # Функции для работы с OpenWeatherMap API
 │   └── visualizations.py   # Функции для визуализации данных
 ├── requirements.txt        # Зависимости проекта
 ├── .gitignore             # Игнорируемые файлы
