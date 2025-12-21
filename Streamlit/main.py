@@ -20,12 +20,12 @@ from utils.weather_api import (
     get_current_temperature_sync,
 )
 
-st.set_page_config(page_title="Анализ температурных данных", page_icon="🌡️", layout="wide")
 
+st.set_page_config(page_title="Анализ температурных данных", page_icon="🌡️", layout="wide")
 st.title("🌡️ Анализ температурных данных")
 st.markdown("---")
-
 st.header("📁 Загрузка данных")
+
 uploaded_file = st.file_uploader("Выберите CSV-файл с температурными данными", type="csv")
 
 if "analysis_results" not in st.session_state:
@@ -52,13 +52,14 @@ if uploaded_file is not None:
     if "timestamp" in display_data.columns:
         display_data = display_data.copy()
         display_data["timestamp"] = display_data["timestamp"].dt.strftime("%Y-%m-%d")
-    st.dataframe(display_data, width="stretch")
 
+    st.dataframe(display_data, width="stretch")
     st.subheader("📈 Описательная статистика")
+
     numeric_cols = data.select_dtypes(include=[np.number]).columns
     desc_data = data[numeric_cols].describe()
-    st.dataframe(desc_data, width="stretch")
 
+    st.dataframe(desc_data, width="stretch")
     st.markdown("---")
     st.header("🔍 Анализ данных")
 
@@ -84,9 +85,10 @@ if uploaded_file is not None:
 
             if "parallel_performance" in st.session_state:
                 perf = st.session_state.parallel_performance
-                st.success("✅ Сравнение завершено!")
 
+                st.success("✅ Сравнение завершено!")
                 st.subheader("📊 Результаты сравнения производительности")
+
                 col1, col2, col3 = st.columns(3)
                 with col1:
                     st.metric("Последовательно", f"{perf['sequential']:.3f} сек")
@@ -98,7 +100,6 @@ if uploaded_file is not None:
                 if perf["sequential"] > 0:
                     speedup_process = perf["sequential"] / perf["parallel_process"]
                     speedup_thread = perf["sequential"] / perf["parallel_thread"]
-
                     fastest_method = min(perf.items(), key=lambda x: x[1])
                     fastest_name = {
                         "sequential": "Последовательный",

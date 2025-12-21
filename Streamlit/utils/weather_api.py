@@ -1,30 +1,28 @@
-import asyncio
-import time
 from datetime import datetime
 from typing import Dict, Optional, Tuple
-
 import aiohttp
+import asyncio
 import requests
+import time
 
 
 def get_current_temperature_sync(city: str, api_key: str) -> Tuple[Optional[float], Optional[str]]:
     url = "http://api.openweathermap.org/data/2.5/weather"
     params = {"q": city, "appid": api_key, "units": "metric"}
-
     try:
         response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
-
         data = response.json()
         temperature = data["main"]["temp"]
-        return temperature, None
 
+        return temperature, None
     except requests.exceptions.HTTPError as e:
         if response.status_code == 401:
             error_msg = (
                 "Invalid API key. Please see https://openweathermap.org/faq#error401 for more info."
             )
             return None, error_msg
+
         return None, f"HTTP Error: {str(e)}"
     except requests.exceptions.RequestException as e:
         return None, f"Request Error: {str(e)}"
@@ -39,7 +37,6 @@ async def get_current_temperature_async(
 ) -> Tuple[Optional[float], Optional[str]]:
     url = "http://api.openweathermap.org/data/2.5/weather"
     params = {"q": city, "appid": api_key, "units": "metric"}
-
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(
@@ -52,6 +49,7 @@ async def get_current_temperature_async(
                 response.raise_for_status()
                 data = await response.json()
                 temperature = data["main"]["temp"]
+
                 return temperature, None
     except aiohttp.ClientError as e:
         return None, f"Client Error: {str(e)}"
@@ -106,7 +104,6 @@ def compare_sync_async_performance(cities: list, api_key: str) -> Dict[str, floa
 
 def get_current_season() -> str:
     month = datetime.now().month
-
     month_to_season = {
         12: "winter",
         1: "winter",
