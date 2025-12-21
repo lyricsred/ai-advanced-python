@@ -70,6 +70,9 @@ def plot_seasonal_profiles(seasonal_stats: pd.DataFrame, city: str) -> plt.Figur
     mean_temps = city_stats["mean_temp"].values
     std_temps = city_stats["std_temp"].values
 
+    upper_bound = mean_temps + 2 * std_temps
+    lower_bound = mean_temps - 2 * std_temps
+
     ax.errorbar(
         seasons,
         mean_temps,
@@ -82,10 +85,6 @@ def plot_seasonal_profiles(seasonal_stats: pd.DataFrame, city: str) -> plt.Figur
         capthick=2,
         label="Средняя температура ± σ",
     )
-
-    upper_bound = mean_temps + 2 * std_temps
-    lower_bound = mean_temps - 2 * std_temps
-
     ax.plot(
         seasons, upper_bound, "--", color="lightblue", linewidth=1.5, label="Верхняя граница (±2σ)"
     )
@@ -100,6 +99,7 @@ def plot_seasonal_profiles(seasonal_stats: pd.DataFrame, city: str) -> plt.Figur
     ax.grid(True, alpha=0.3)
 
     plt.tight_layout()
+
     return fig
 
 
@@ -107,6 +107,8 @@ def plot_temperature_distribution(data: pd.DataFrame, city: str) -> plt.Figure:
     city_data = data[data["city"] == city]
 
     fig, ax = plt.subplots(figsize=(10, 6))
+
+    mean_temp = city_data["temperature"].mean()
 
     ax.hist(
         city_data["temperature"],
@@ -116,9 +118,6 @@ def plot_temperature_distribution(data: pd.DataFrame, city: str) -> plt.Figure:
         edgecolor="black",
         linewidth=0.5,
     )
-
-    mean_temp = city_data["temperature"].mean()
-
     ax.axvline(
         mean_temp, color="red", linestyle="--", linewidth=2, label=f"Среднее: {mean_temp:.2f}°C"
     )
@@ -129,6 +128,7 @@ def plot_temperature_distribution(data: pd.DataFrame, city: str) -> plt.Figure:
     ax.grid(True, alpha=0.3, axis="y")
 
     plt.tight_layout()
+
     return fig
 
 

@@ -1,8 +1,9 @@
-import time
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
 from typing import Dict, Tuple
+
 import numpy as np
 import pandas as pd
+import time
 
 
 def calculate_moving_average(data: pd.DataFrame, window: int = 30) -> pd.Series:
@@ -13,8 +14,8 @@ def calculate_seasonal_statistics(data: pd.DataFrame) -> pd.DataFrame:
     seasonal_stats = (
         data.groupby(["city", "season"]).agg({"temperature": ["mean", "std"]}).reset_index()
     )
-
     seasonal_stats.columns = ["city", "season", "mean_temp", "std_temp"]
+
     return seasonal_stats
 
 
@@ -24,6 +25,7 @@ def detect_anomalies(
     residuals = data["temperature"] - moving_avg
     std_residuals = residuals.std()
     anomalies = np.abs(residuals) > (threshold_std * std_residuals)
+
     return anomalies
 
 
@@ -34,7 +36,6 @@ def analyze_city_data(
     moving_avg = calculate_moving_average(city_data, window)
     anomalies = detect_anomalies(city_data, moving_avg, threshold_std)
     seasonal_stats = calculate_seasonal_statistics(city_data)
-
     city_data = city_data.copy()
     city_data["moving_avg"] = moving_avg
     city_data["anomaly"] = anomalies
@@ -52,7 +53,6 @@ def analyze_data_sequential(
 ) -> Dict[str, Dict]:
     results = {}
     cities = data["city"].unique()
-
     for city in cities:
         city_data = data[data["city"] == city].copy()
         results[city] = analyze_city_data(city_data, window, threshold_std)
@@ -63,6 +63,7 @@ def analyze_data_sequential(
 def analyze_city_wrapper(args: Tuple) -> Tuple[str, Dict]:
     city, city_data, window, threshold_std = args
     results = analyze_city_data(city_data, window, threshold_std)
+
     return city, results
 
 
@@ -73,7 +74,6 @@ def analyze_data_parallel(
     args_list = [
         (city, data[data["city"] == city].copy(), window, threshold_std) for city in cities
     ]
-
     executor_class = ProcessPoolExecutor if method == "process" else ThreadPoolExecutor
     results = {}
     with executor_class() as executor:
