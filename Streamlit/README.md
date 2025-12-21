@@ -123,4 +123,4 @@ Streamlit/
 
 ## Деплой в Streamlit Cloud
 
-TO DO: добавить ссылку на Streamlit Cloud Community
+Приложение развернуто в [Streamlit Community Cloud](https://lyrics-red-temperature-data-analysis.streamlit.app/)
