@@ -13,19 +13,18 @@ def get_current_temperature_sync(city: str, api_key: str) -> Tuple[Optional[floa
         'appid': api_key,
         'units': 'metric'
     }
-    
     try:
         response = requests.get(url, params=params, timeout=10)
         response.raise_for_status()
-        
         data = response.json()
         temperature = data['main']['temp']
+
         return temperature, None
-        
     except requests.exceptions.HTTPError as e:
         if response.status_code == 401:
             error_msg = "Invalid API key. Please see https://openweathermap.org/faq#error401 for more info."
             return None, error_msg
+
         return None, f"HTTP Error: {str(e)}"
     except requests.exceptions.RequestException as e:
         return None, f"Request Error: {str(e)}"
@@ -42,7 +41,6 @@ async def get_current_temperature_async(city: str, api_key: str) -> Tuple[Option
         'appid': api_key,
         'units': 'metric'
     }
-    
     try:
         async with aiohttp.ClientSession() as session:
             async with session.get(url, params=params, timeout=aiohttp.ClientTimeout(total=10)) as response:
@@ -53,6 +51,7 @@ async def get_current_temperature_async(city: str, api_key: str) -> Tuple[Option
                 response.raise_for_status()
                 data = await response.json()
                 temperature = data['main']['temp']
+
                 return temperature, None      
     except aiohttp.ClientError as e:
         return None, f"Client Error: {str(e)}"
@@ -103,7 +102,6 @@ def compare_sync_async_performance(cities: list, api_key: str) -> Dict[str, floa
 
 def get_current_season() -> str:
     month = datetime.now().month
-    
     month_to_season = {
         12: "winter", 1: "winter", 2: "winter",
         3: "spring", 4: "spring", 5: "spring",

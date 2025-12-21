@@ -58,13 +58,12 @@ def plot_seasonal_profiles(seasonal_stats: pd.DataFrame, city: str) -> plt.Figur
     mean_temps = city_stats['mean_temp'].values
     std_temps = city_stats['std_temp'].values
     
+    upper_bound = mean_temps + 2 * std_temps
+    lower_bound = mean_temps - 2 * std_temps
+
     ax.errorbar(seasons, mean_temps, yerr=std_temps,
                fmt='o-', color='blue', linewidth=3, markersize=10,
                capsize=5, capthick=2, label='Средняя температура ± σ')
-    
-    upper_bound = mean_temps + 2 * std_temps
-    lower_bound = mean_temps - 2 * std_temps
-    
     ax.plot(seasons, upper_bound, '--', color='lightblue', 
            linewidth=1.5, label='Верхняя граница (±2σ)')
     ax.plot(seasons, lower_bound, '--', color='lightblue', 
@@ -78,6 +77,7 @@ def plot_seasonal_profiles(seasonal_stats: pd.DataFrame, city: str) -> plt.Figur
     ax.grid(True, alpha=0.3)
     
     plt.tight_layout()
+
     return fig
 
 
@@ -85,12 +85,11 @@ def plot_temperature_distribution(data: pd.DataFrame, city: str) -> plt.Figure:
     city_data = data[data['city'] == city]
     
     fig, ax = plt.subplots(figsize=(10, 6))
-    
-    ax.hist(city_data['temperature'], bins=50, color='skyblue', 
-           alpha=0.7, edgecolor='black', linewidth=0.5)
-    
+
     mean_temp = city_data['temperature'].mean()
 
+    ax.hist(city_data['temperature'], bins=50, color='skyblue', 
+           alpha=0.7, edgecolor='black', linewidth=0.5)
     ax.axvline(mean_temp, color='red', linestyle='--', linewidth=2,
               label=f'Среднее: {mean_temp:.2f}°C')
     ax.set_xlabel('Температура (°C)', fontsize=12)
@@ -100,13 +99,13 @@ def plot_temperature_distribution(data: pd.DataFrame, city: str) -> plt.Figure:
     ax.grid(True, alpha=0.3, axis='y')
     
     plt.tight_layout()
+
     return fig
 
 
 def plot_anomaly_timeline(data: pd.DataFrame, city: str) -> plt.Figure:
     city_data = data[data['city'] == city].copy()
     city_data = city_data.sort_values('timestamp')
-    
     city_data['year_month'] = pd.to_datetime(city_data['timestamp']).dt.to_period('M')
     monthly_anomalies = city_data.groupby('year_month')['anomaly'].sum().reset_index()
     monthly_anomalies['year_month'] = monthly_anomalies['year_month'].astype(str)

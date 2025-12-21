@@ -25,11 +25,10 @@ st.set_page_config(
     page_icon="🌡️",
     layout="wide"
 )
-
 st.title('🌡️ Анализ температурных данных')
 st.markdown('---')
-
 st.header('📁 Загрузка данных')
+
 uploaded_file = st.file_uploader('Выберите CSV-файл с температурными данными', type='csv')
 
 if 'analysis_results' not in st.session_state:
@@ -55,13 +54,13 @@ if uploaded_file is not None:
     if 'timestamp' in display_data.columns:
         display_data = display_data.copy()
         display_data['timestamp'] = display_data['timestamp'].dt.strftime('%Y-%m-%d')
-    st.dataframe(display_data, width='stretch')
-    
+
+    st.dataframe(display_data, width='stretch')    
     st.subheader('📈 Описательная статистика')
     numeric_cols = data.select_dtypes(include=[np.number]).columns
     desc_data = data[numeric_cols].describe()
+
     st.dataframe(desc_data, width='stretch')
-    
     st.markdown('---')
     st.header('🔍 Анализ данных')
     

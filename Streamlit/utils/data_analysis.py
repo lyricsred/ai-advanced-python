@@ -13,8 +13,8 @@ def calculate_seasonal_statistics(data: pd.DataFrame) -> pd.DataFrame:
     seasonal_stats = data.groupby(['city', 'season']).agg({
         'temperature': ['mean', 'std']
     }).reset_index()
-    
     seasonal_stats.columns = ['city', 'season', 'mean_temp', 'std_temp']
+
     return seasonal_stats
 
 
@@ -23,6 +23,7 @@ def detect_anomalies(data: pd.DataFrame, moving_avg: pd.Series,
     residuals = data['temperature'] - moving_avg
     std_residuals = residuals.std()
     anomalies = np.abs(residuals) > (threshold_std * std_residuals)
+
     return anomalies
 
 
@@ -49,7 +50,6 @@ def analyze_data_sequential(data: pd.DataFrame, window: int = 30,
                            threshold_std: float = 2.0) -> Dict[str, Dict]:
     results = {}
     cities = data['city'].unique()
-    
     for city in cities:
         city_data = data[data['city'] == city].copy()
         results[city] = analyze_city_data(city_data, window, threshold_std)
@@ -60,6 +60,7 @@ def analyze_data_sequential(data: pd.DataFrame, window: int = 30,
 def analyze_city_wrapper(args: Tuple) -> Tuple[str, Dict]:
     city, city_data, window, threshold_std = args
     results = analyze_city_data(city_data, window, threshold_std)
+
     return city, results
 
 
