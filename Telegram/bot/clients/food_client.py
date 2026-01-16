@@ -11,8 +11,7 @@ class FoodClient:
             params = {
                 'action': 'process',
                 'search_terms': product_name,
-                'json': 'true',
-                'page_size': 1
+                'json': 'true'
             }
             response = requests.get(self.base_url, params=params, timeout=10)
             
