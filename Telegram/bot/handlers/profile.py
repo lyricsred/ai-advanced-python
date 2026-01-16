@@ -66,7 +66,7 @@ async def set_profile_gender(update: Update, context: ContextTypes.DEFAULT_TYPE)
         context.user_data['gender'] = 'female'
     else:
         await update.message.reply_text(
-            'Пожалуйста, введите 'мужской' или 'женский' (или male/female):'
+            'Пожалуйста, введите \'мужской\' или \'женский\' (или male/female):'
         )
         return GENDER
     
@@ -138,7 +138,7 @@ async def set_profile_city(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             f'Вес: {weight} кг\n'
             f'Рост: {height} см\n'
             f'Возраст: {age} лет\n'
-            f'Пол: {'Мужской' if gender == 'male' else 'Женский'}\n'
+            f'Пол: {"Мужской" if gender == "male" else "Женский"}\n'
             f'Активность: {activity_minutes} мин/день\n'
             f'Город: {city}\n\n'
             f'🎯 Ваши цели:\n'
