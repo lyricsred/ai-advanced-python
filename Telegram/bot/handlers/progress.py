@@ -2,10 +2,11 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from datetime import datetime, date
 from bot.models import User, WaterLog, FoodLog, WorkoutLog
-from bot.utils import get_session
+from bot.utils import get_session, logger
 
 
 async def check_progress(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    logger.info(f'Получено сообщение: /check_progress')
     session = get_session()
     try:
         user = session.query(User).filter_by(telegram_id=update.effective_user.id).first()

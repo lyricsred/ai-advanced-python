@@ -2,13 +2,16 @@ from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 from datetime import datetime, date
 from bot.models import User, FoodLog
-from bot.utils import get_session
+from bot.utils import get_session, logger
 from bot.clients import FoodClient
 
 FOOD_AMOUNT = 1
 
 
 async def log_food_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    message_text = '/log_food ' + ' '.join(context.args) if context.args else '/log_food'
+    logger.info(f'Получено сообщение: {message_text}')
+    
     if not context.args:
         await update.message.reply_text(
             'Использование: /log_food <название продукта>\n'
