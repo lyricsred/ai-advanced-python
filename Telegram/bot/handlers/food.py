@@ -24,14 +24,14 @@ async def log_food_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     
     if not food_info or food_info['calories'] == 0:
         await update.message.reply_text(
-            f'❌ Не удалось найти информацию о продукте '{product_name}'.\n'
+            f'❌ Не удалось найти информацию о продукте "{product_name}".\n'
             f'Попробуйте использовать английское название или другой продукт.'
         )
         return ConversationHandler.END
     
     context.user_data['food_info'] = food_info
     await update.message.reply_text(
-        f'🍽 {food_info['name']} — {food_info['calories']:.0f} ккал на 100 г.\n\n'
+        f'🍽 {food_info["name"]} — {food_info["calories"]:.0f} ккал на 100 г.\n\n'
         f'Сколько грамм вы съели?'
     )
     return FOOD_AMOUNT
@@ -83,7 +83,7 @@ async def log_food_amount(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
             )
             
             await update.message.reply_text(
-                f'✅ Записано: {total_calories:.1f} ккал ({amount:.0f} г {food_info['name']})\n\n'
+                f'✅ Записано: {total_calories:.1f} ккал ({amount:.0f} г {food_info["name"]})\n\n'
                 f'📊 Потреблено за сегодня: {total_calories_today:.0f} ккал'
             )
         except Exception as e:
