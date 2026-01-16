@@ -30,6 +30,7 @@ pip install -r requirements.txt
 ```env
 BOT_TOKEN=ваш_токен_бота
 DATABASE_URL=sqlite:///bot.db  # по умолчанию SQLite
+OPEN_FOOD_FACTS_URL=https://world.openfoodfacts.org/cgi/search.pl # URL для API поиска калорий
 ```
 
 4. Получите токен бота:
