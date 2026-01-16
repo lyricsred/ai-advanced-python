@@ -1,8 +1,10 @@
 from telegram import Update
 from telegram.ext import ContextTypes
+from bot.utils import logger
 
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    logger.info(f'Получено сообщение: /start')
     welcome_message = (
         '👋 Привет! Я бот для отслеживания воды, калорий и активности.\n\n'
         '📋 Доступные команды:\n'

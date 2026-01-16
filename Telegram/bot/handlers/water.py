@@ -2,11 +2,13 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from datetime import datetime, date
 from bot.models import User, WaterLog
-from bot.utils import get_session
+from bot.utils import get_session, logger
 
 
 async def log_water(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Обработчик команды /log_water"""
+    message_text = '/log_water ' + ' '.join(context.args) if context.args else '/log_water'
+    logger.info(f'Получено сообщение: {message_text}')
+    
     if not context.args:
         await update.message.reply_text(
             "Использование: /log_water <количество>\n"

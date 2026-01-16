@@ -1,12 +1,13 @@
 from telegram import Update
 from telegram.ext import ContextTypes, ConversationHandler
 from bot.models import User
-from bot.utils import get_session, calculate_water_goal, calculate_calorie_goal
+from bot.utils import get_session, calculate_water_goal, calculate_calorie_goal, logger
 
 WEIGHT, HEIGHT, AGE, GENDER, ACTIVITY, CITY = range(6)
 
 
 async def set_profile_start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+    logger.info(f'Получено сообщение: /set_profile')
     await update.message.reply_text(
         'Давайте настроим ваш профиль!\n\n'
         'Введите ваш вес (в кг):'

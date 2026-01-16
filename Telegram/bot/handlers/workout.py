@@ -2,10 +2,13 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from datetime import datetime, date
 from bot.models import User, WorkoutLog
-from bot.utils import get_session, calculate_workout_calories
+from bot.utils import get_session, calculate_workout_calories, logger
 
 
 async def log_workout(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    message_text = '/log_workout ' + ' '.join(context.args) if context.args else '/log_workout'
+    logger.info(f'Получено сообщение: {message_text}')
+    
     if len(context.args) < 2:
         await update.message.reply_text(
             'Использование: /log_workout <тип тренировки> <время в минутах>\n'
