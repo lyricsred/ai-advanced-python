@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     algorithm: str = 'HS256'
     access_token_expire_minutes: int = 60 * 24
     short_code_length: int = 6
+    link_inactive_days: int = 30
+    cleanup_interval_hours: int = 24
 
     class Config:
         env_file = '.env'

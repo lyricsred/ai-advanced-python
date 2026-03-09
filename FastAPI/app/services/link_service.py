@@ -1,6 +1,6 @@
 import random
 import string
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional
 
 from sqlalchemy import func
@@ -150,6 +150,27 @@ class LinkService:
             },
         )
         return link
+
+    def cleanup_inactive(self, inactive_days: Optional[int] = None) -> int:
+        days = inactive_days or settings.link_inactive_days
+        threshold = datetime.utcnow() - timedelta(days=days)
+
+        links_q = self.db.query(Link).filter(
+            func.coalesce(Link.last_clicked_at, Link.created_at) < threshold
+        )
+        links = links_q.all()
+        if not links:
+            return 0
+
+        for link in links:
+            self.db.delete(link)
+        self.db.commit()
+
+        cache.delete_pattern('link:*')
+        cache.delete_pattern('stats:*')
+        cache.delete_pattern(f'{CACHE_KEY_SEARCH_PREFIX}*')
+
+        return len(links)
 
     def search_by_original_url(self, original_url: str, use_cache: bool = True) -> list[Link]:
         url_normalized = original_url.strip().lower()
