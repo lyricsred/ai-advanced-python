@@ -9,7 +9,7 @@ cd FastAPI
 docker compose up --build
 ```
 
-API доступен по адресу: http://localhost:8000
+API для локального запуска доступен по адресу: http://localhost:8000
 
 - Документация: http://localhost:8000/docs  
 - Health: http://localhost:8000/health  
@@ -120,7 +120,30 @@ FastAPI/
 
 ## База данных
 
-- **PostgreSQL**: пользователи (`users`), ссылки (`links`). Таблицы создаются при старте приложения.
-- **Redis**: кэш для разрешения short_code → URL и для статистики; инвалидация при обновлении/удалении ссылки.
+- **PostgreSQL**: основное хранилище пользователей и ссылок. Таблицы создаются при старте приложения.
+
+  - Таблица `users`:
+    - `id` (int, PK)
+    - `email` (str, unique, not null)
+    - `hashed_password` (str, not null)
+    - `created_at` (datetime)
+
+  - Таблица `links`:
+    - `id` (int, PK)
+    - `short_code` (str, unique, not null)
+    - `original_url` (text, not null)
+    - `created_at` (datetime)
+    - `expires_at` (datetime, nullable)
+    - `click_count` (int, default 0)
+    - `last_clicked_at` (datetime, nullable)
+    - `owner_id` (int, FK → `users.id`, nullable)
+
+- **Redis**: кэш для разрешения short_code → URL и для статистики (кэшируются популярные ссылки и данные по переходам); кэш инвалидируется при обновлении/удалении ссылки.
 
 Переменные окружения задаются в `docker-compose.yml`; для локального запуска без Docker скопируйте `.env_example` в `.env` и укажите `DATABASE_URL` и `REDIS_URL`.
+
+## Прод-развёртывание
+
+Рабочий экземпляр сервиса развёрнут на Render и доступен по адресу: `https://ai-advanced-python-1.onrender.com`.
+
+Все примеры запросов из этого README можно выполнять, заменив `http://localhost:8000` на `https://ai-advanced-python-1.onrender.com`.
