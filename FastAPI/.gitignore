@@ -9,3 +9,5 @@ build/
 .venv/
 venv/
 .env.local
+test_db.sqlite
+.coverage

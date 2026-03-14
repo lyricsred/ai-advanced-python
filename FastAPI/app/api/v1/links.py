@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import APIRouter, Depends, HTTPException, status, Request
 from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
@@ -40,7 +42,7 @@ def shorten(
     data: LinkCreate,
     request: Request,
     db: Session = Depends(get_db),
-    current_user: User | None = Depends(get_current_user_optional),
+    current_user: Optional[User] = Depends(get_current_user_optional),
 ):
     svc = _link_service(request, db)
     try:

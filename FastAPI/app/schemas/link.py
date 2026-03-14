@@ -14,9 +14,10 @@ class LinkCreate(BaseModel):
     def url_must_be_string(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError('URL is required')
-        if not v.startswith(('http://', 'https://')):
-            return 'https://' + v.strip()
-        return v.strip()
+        s = v.strip()
+        if not s.startswith(('http://', 'https://')):
+            return 'https://' + s
+        return s
 
 
 class LinkUpdate(BaseModel):
@@ -27,9 +28,10 @@ class LinkUpdate(BaseModel):
     def url_must_be_string(cls, v: str) -> str:
         if not v or not v.strip():
             raise ValueError('URL is required')
-        if not v.startswith(('http://', 'https://')):
-            return 'https://' + v.strip()
-        return v.strip()
+        s = v.strip()
+        if not s.startswith(('http://', 'https://')):
+            return 'https://' + s
+        return s
 
 
 class LinkResponse(BaseModel):
