@@ -36,7 +36,7 @@ class ShortenerUser(HttpUser):
             return
         self.client.get(
             f'/api/v1/links/{self.my_short_code}',
-            name='/redirect [short_code]',
+            name='GET /links/{short_code}',
             allow_redirects=False,
         )
 
